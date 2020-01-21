@@ -4,31 +4,31 @@
 			<view class="item flexRowBetween">
 				<view class="ll">公司名称</view>
 				<view class="rr">
-					<input type="number" value="" placeholder="请输入" placeholder-class="placeholder" />
+					<input type="number"  v-model="submitData.passage1" placeholder="请输入" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<view class="item flexRowBetween">
 				<view class="ll">资金需求(万元)</view>
 				<view class="rr">
-					<input type="number" value="" placeholder="请输入" placeholder-class="placeholder" />
+					<input type="number" v-model="submitData.keywords" placeholder="请输入" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<view class="item flexRowBetween">
 				<view class="ll">联系人</view>
 				<view class="rr">
-					<input type="text" value="" placeholder="请输入" placeholder-class="placeholder" />
+					<input type="text" v-model="submitData.title" placeholder="请输入" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<view class="item flexRowBetween">
 				<view class="ll">联系电话</view>
 				<view class="rr">
-					<input type="text" value="" placeholder="请输入" placeholder-class="placeholder" maxlength='11'/>
+					<input type="text" v-model="submitData.phone" placeholder="请输入" placeholder-class="placeholder" maxlength='11'/>
 				</view>
 			</view>
 			
 		</view>
 		<view class="submitbtn" style="margin-top: 200rpx;">
-			<button class="btn" type="button">提交</button>
+			<button class="btn" type="button" open-type="getUserInfo" @getuserinfo="Utils.stopMultiClick(submit)">提交</button>
 		</view>
 	</view>
 </template>
@@ -38,24 +38,78 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				wx_info:{},
-				is_show:false
+				Utils:this.$Utils,
+				submitData:{
+					type:1,
+					title:'',
+					phone:'',
+					keywords:'',
+					relation_id:'',
+					behavior:'',
+					passage1:''
+				}
 			}
 		},
 		
-		onLoad() {
+		onLoad(options) {
 			const self = this;
+			self.submitData.relation_id = options.id;
+			self.submitData.behavior = options.behavior;
 			// self.$Utils.loadAll(['getMainData'], self);
 		},
+		
 		methods: {
-			getMainData() {
+			
+			submit() {
 				const self = this;
-				console.log('852369')
+				uni.setStorageSync('canClick', false);
+				uni.showLoading({
+					title: '提交中...',
+					mask: true
+				});
+				const pass = self.$Utils.checkComplete(self.submitData);
+				console.log('pass', pass);
+				console.log('self.submitData',self.submitData)
+				
+				if (pass) {	
+					const callback = (user, res) => {
+						console.log(res)
+						self.messageAdd();
+					};
+					self.$Utils.getAuthSetting(callback);
+				
+				} else {
+					uni.setStorageSync('canClick', true);
+					self.$Utils.showToast('请补全信息', 'none')
+				};
+			},
+			
+			messageAdd() {
+				const self = this;
 				const postData = {};
 				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				if(!wx.getStorageSync('user_info')||!wx.getStorageSync('user_info').headImgUrl){
+				  postData.refreshToken = true;
+				};
+				postData.data = {};
+				postData.data = self.$Utils.cloneForm(self.submitData);
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {					
+						self.$Utils.showToast('提交成功', 'none', 1000)
+						setTimeout(function() {
+							uni.navigateBack({
+								delta:1
+							})
+						}, 1000);
+						
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.messageAdd(postData, callback);
+			},
+			
 		}
 	};
 </script>

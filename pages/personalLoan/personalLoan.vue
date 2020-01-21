@@ -3,8 +3,9 @@
 		
 		<view class="pdlr4">
 			<view class="loanList pdt15 center">
-				<view class="item" v-for="(item,index) in loadData" :key="index"  @click="Router.navigateTo({route:{path:'/pages/personalLoanDetail/personalLoanDetail'}})">
-					<image class="pic" src="../../static/images/the-loan-img.png" mode=""></image>
+				<view class="item" v-for="(item,index) in mainData" :key="index"  :data-id="item.id"
+				@click="Router.navigateTo({route:{path:'/pages/personalLoanDetail/personalLoanDetail?id='+$event.currentTarget.dataset.id}})">
+					<image class="pic" :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" mode=""></image>
 					<view class="tit">{{item.title}}</view>
 				</view>
 			</view>
@@ -18,25 +19,48 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				wx_info:{},
-				is_show:false,
+				mainData:[],
 				loadData:[{title:'个人消费贷款'},{title:'个人经营贷款'}]
 			}
 		},
 		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData'], self);
 		},
+		
 		methods: {
-			getMainData() {
-				const self = this;
-				console.log('852369')
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+			
+			
+			getMainData(){
+			    var self = this;
+			    var postData = {};
+			    postData.searchItem = {
+					thirdapp_id:2,
+				};
+				postData.getBefore = {
+					child:{
+						tableName:'Label',
+						middleKey:'parentid',
+						key:'id',
+						searchItem:{
+							status:['in',[1]],
+							title:['in',['个人贷款']]
+						},
+						condition:'in',
+					}
+				};
+				postData.order = {
+					listorder:'desc'
+				};
+			    var callback = function(res){
+			        if(res.info.data.length>0&&res.info.data[0]){
+						self.mainData.push.apply(self.mainData,res.info.data)
+			        };    
+					self.$Utils.finishFunc('getMainData');
+			    };
+				self.$apis.labelGet(postData, callback);
+			},
 		}
 	};
 </script>

@@ -5,9 +5,9 @@
 			<view class="banner-box">
 				<view class="banner pdtb15">
 					<swiper class="swiper-box" indicator-dots="true" autoplay="true" interval="3000" duration="1000" indicator-active-color="#fff">
-						<block v-for="(item,index) in labelData" :key="index">
+						<block v-for="(item,index) in sliderData.mainImg" :key="index">
 							<swiper-item class="swiper-item">
-								<image :src="item" class="slide-image" />
+								<image :src="item.url" class="slide-image" />
 							</swiper-item>
 						</block>
 					</swiper>
@@ -19,8 +19,10 @@
 				</view>
 				<view class="rr fs13 color6">
 					<swiper vertical="true" autoplay="true" circular="true" interval="3000">
-						<swiper-item v-for="(item, index) in msg" :key="index">
-							<navigator class="avoidOverflow">{{item}}</navigator>
+						<swiper-item v-for="(item, index) in noticeData" :key="index">
+							<navigator class="avoidOverflow" :data-id="item.id"
+			@click="Router.navigateTo({route:{path:'/pages/informationDetail/informationDetail?id='+$event.currentTarget.dataset.id}})"
+							>{{item.title}}</navigator>
 						</swiper-item>
 					</swiper>
 				</view>
@@ -41,10 +43,10 @@
 				<image src="../../static/images/home-icon3.png"></image>
 				<view class="tit">贷款资讯</view>
 			</view>
-			<view class="item"  @click="Router.navigateTo({route:{path:'/pages//'}})">
+			<button class="item" open-type="contact">
 				<image src="../../static/images/home-icon4.png"></image>
 				<view class="tit">在线客服</view>
-			</view>
+			</button>
 			<view class="item" @click="Router.navigateTo({route:{path:'/pages/aboutUs/aboutUs'}})">
 				<image src="../../static/images/home-icon5.png"></image>
 				<view class="tit">关于我们</view>
@@ -63,18 +65,24 @@
 		<view class="mglr4 pdtb15">
 			<view class="fs15 ftw pdb10">特色服务</view>
 			<view class="flexRowBetween ind-service">
-				<view class="Lpic item" @click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail'}})">
-					<image src="../../static/images/home-img.png" mode=""></image>
-					<view class="text flexCenter">财务咨询</view>
+				<view class="Lpic item" v-if="serviceData[0]"
+				@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[0].id}})">
+					<image :src="serviceData&&serviceData[0]&&serviceData[0].mainImg&&
+					serviceData[0].mainImg[0]?serviceData[0].mainImg[0].url:''" mode=""></image>
+					<view class="text flexCenter">{{serviceData&&serviceData[0]?serviceData[0].title:''}}</view>
 				</view>
 				<view class="R-TwoPic">
-					<view class="item mgb10" @click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail'}})">
-						<image src="../../static/images/home-img1.png" mode=""></image>
-						<view class="text flexCenter">税务咨询</view>
+					<view class="item mgb10" v-if="serviceData[1]"
+					@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[1].id}})">
+						<image :src="serviceData&&serviceData[1]&&serviceData[1].mainImg&&
+					serviceData[1].mainImg[0]?serviceData[1].mainImg[0].url:''" mode=""></image>
+						<view class="text flexCenter">{{serviceData&&serviceData[1]?serviceData[1].title:''}}</view>
 					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail'}})">
-						<image src="../../static/images/home-img1.png" mode=""></image>
-						<view class="text flexCenter">法律咨询</view>
+					<view class="item" v-if="serviceData[2]"
+					@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[2].id}})">
+						<image :src="serviceData&&serviceData[2]&&serviceData[2].mainImg&&
+					serviceData[2].mainImg[0]?serviceData[2].mainImg[0].url:''" mode=""></image>
+						<view class="text flexCenter">{{serviceData&&serviceData[2]?serviceData[2].title:''}}</view>
 					</view>
 				</view>
 			</view>
@@ -87,11 +95,14 @@
 				<view class="tt" :class="curr==2?'on':''" @click="changeCurr('2')">贷款资讯</view>
 			</view>
 			<view class="zixunList">
-				<view class="item flexRowBetween" v-for="(item,index) in zixunData" :key="index" @click="Router.navigateTo({route:{path:'/pages/newsDetail/newsDetail'}})">
-					<view class="ll"><image src="../../static/images/home-img2.png" mode=""></image></view>
+				<view class="item flexRowBetween" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
+				@click="Router.navigateTo({route:{path:'/pages/newsDetail/newsDetail?id='+$event.currentTarget.dataset.id}})">
+					<view class="ll"><image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" mode=""></image></view>
 					<view class="rr">
-						<view class="tit fs13 avoidOverflow2">夫妻因婚外情离婚，无过错方可以向对方要多少精神损害赔偿?</view>
-						<view class="time color9 fs10">2020.01.14</view>
+						<view class="tit fs13 avoidOverflow2">
+							{{item.title}}
+						</view>
+						<view class="time color9 fs10">{{item.create_time}}</view>
 					</view>
 				</view>
 			</view>
@@ -142,34 +153,210 @@
 					'36氪热文榜推荐、CSDN公号推荐 DCloud CEO文章热烈通知公告热烈通知公告'
 				],
 				curr:1,
-				zixunData:[{},{},{},{}]
+				zixunData:[{},{},{},{}],
+				sliderData:{},
+				noticeData:[],
+				serviceData:[],
+				getBefore:{
+					article:{
+						tableName:'Label',
+						middleKey:'menu_id',
+						key:'id',
+						searchItem:{
+							title: ['in', ['行业资讯']],
+						},
+						condition:'in'
+					}
+				},
+				mainData:[]
 			}
 		},
 		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			self.$Utils.loadAll(['getPhoneData','getServiceData','getSliderData','getNoticeData','getMainData'], self);
 		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
+			
+			getMainData(isNew) {
+				const self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						is_page: true,
+						pagesize: 10
+					}
+				};
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id:2
+				};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.getBefore = self.$Utils.cloneForm(self.getBefore)
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData,res.info.data)
+					}
+					console.log(self.noticeData)
+					self.$Utils.finishFunc('getMainData');
+				};
+				self.$apis.articleGet(postData, callback);
+			},
+			
+			getServiceData(){
+			    var self = this;
+			    var postData = {};
+			    postData.searchItem = {
+					thirdapp_id:2,
+				};
+				postData.getBefore = {
+					child:{
+						tableName:'Label',
+						middleKey:'parentid',
+						key:'id',
+						searchItem:{
+							status:['in',[1]],
+							title:['in',['特色服务']]
+						},
+						condition:'in',
+					}
+				};
+				postData.order = {
+					listorder:'desc'
+				};
+			    var callback = function(res){
+			        if(res.info.data.length>0&&res.info.data[0]){
+						self.serviceData.push.apply(self.serviceData,res.info.data)
+			        };    
+					self.$Utils.finishFunc('getServiceData');
+			    };
+				self.$apis.labelGet(postData, callback);
+			},
+			
+			
+			getSliderData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+						console.log('423423',self.sliderData)
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
+			
+			getNoticeData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id:2
+				};
+				postData.getBefore = {
+					article:{
+						tableName:'Label',
+						middleKey:'menu_id',
+						key:'id',
+						searchItem:{
+							title: ['in', ['首页广告']],
+						},
+						condition:'in'
+					}
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.noticeData.push.apply(self.noticeData,res.info.data)
+					}
+					console.log(self.noticeData)
+					self.$Utils.finishFunc('getNoticeData');
+				};
+				self.$apis.articleGet(postData, callback);
+			},
+			
 			changeCurr(curr){
 				const self = this;
 				if(curr!=self.curr){
-					self.curr = curr
+					self.curr = curr;
+					if(self.curr==1){
+						self.getBefore = {
+							article:{
+								tableName:'Label',
+								middleKey:'menu_id',
+								key:'id',
+								searchItem:{
+									title: ['in', ['行业资讯']],
+								},
+								condition:'in'
+							}
+						}
+					}else if(self.curr==2){
+						self.getBefore = {
+							article:{
+								tableName:'Label',
+								middleKey:'menu_id',
+								key:'id',
+								searchItem:{
+									title: ['in', ['贷款资讯']],
+								},
+								condition:'in'
+							}
+						}
+					};
+					self.getMainData(true)
 				}
+			},
+			
+			getPhoneData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id:2
+				};
+				postData.getBefore = {
+					article:{
+						tableName:'Label',
+						middleKey:'menu_id',
+						key:'id',
+						searchItem:{
+							title: ['in', ['关于我们']],
+						},
+						condition:'in'
+					}
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.phoneData = res.info.data[0];
+					};
+					console.log(self.mainData)
+					self.$Utils.finishFunc('getPhoneData');
+				};
+				self.$apis.articleGet(postData, callback);
 			},
 			//拨打电话
 			tel(){
+				const self = this;
 				uni.makePhoneCall({
-					phoneNumber: '18932145667' //仅为示例
+					phoneNumber: self.phoneData.title //仅为示例
 				});
 			},
-			getMainData() {
-				const self = this;
-				console.log('852369')
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+			
 		}
 	};
 </script>
@@ -180,5 +367,15 @@
 	
 	page {padding-bottom: 140rpx;}
 
-	
+	button{
+		background: none;
+		line-height: 1.5;
+	}
+	button::after{
+		border: none;
+	}
+	.button-hover{
+		color: #000000;
+		background: none;
+	}
 </style>

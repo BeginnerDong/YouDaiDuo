@@ -7,12 +7,12 @@
 		<view class="mglr4 adrsLis">
 			<view class="item borderB1">
 				<image class="icon" src="../../static/images/about-us-icon2.png" mode=""></image>
-				<view>15623266556</view>
+				<view>{{mainData.title}}</view>
 			</view>
 			<view class="item">
 				<image class="icon" src="../../static/images/about-us-icon1.png" mode=""></image>
 				
-				<view>陕西省西安市雁塔区高新大都荟</view>
+				<view>{{mainData.description}}</view>
 			</view>
 		</view>
 		<view class="f5H10"></view>
@@ -20,8 +20,9 @@
 			<view class="ftw fs15 pdb10">关于我们</view>
 			<view class="xqInfor">
 				<view class="cont fs13">
-					<view>和公交卡分类时段海格力斯过会就客服电话鬼斧神工和发换个飞机口袋里还股份第三个和付赛供货方度高刚发的刚发就是个好人撒刚发的省挂号费数据库规划局分雕刻时光发几个好供货方接口上的</view>
-					<view>估计快了单方事故了供货方加快代领很过分四大皆空供货方度高话估计发过火供货方就看看的火锅</view>
+					<view class="content ql-editor" style="padding:0;"
+					v-html="mainData.content">
+					</view>
 				</view>
 			</view>
 			
@@ -34,24 +35,45 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				wx_info:{},
-				is_show:false
+				mainData:{}
 			}
 		},
 		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData'], self);
 		},
+		
 		methods: {
+			
 			getMainData() {
 				const self = this;
-				console.log('852369')
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.searchItem = {
+					thirdapp_id:2
+				};
+				postData.getBefore = {
+					article:{
+						tableName:'Label',
+						middleKey:'menu_id',
+						key:'id',
+						searchItem:{
+							title: ['in', ['关于我们']],
+						},
+						condition:'in'
+					}
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData = res.info.data[0];
+						const regex = new RegExp('<img', 'gi');
+						self.mainData.content = self.mainData.content.replace(regex, `<img style="max-width: 100%;"`);
+					};
+					console.log(self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
+				self.$apis.articleGet(postData, callback);
+			},
 		}
 	};
 </script>

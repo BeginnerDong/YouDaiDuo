@@ -3,8 +3,12 @@
 		<view class=""><image class="topBj" src="../../static/images/about-img.png" mode=""></image></view>
 		
 		<view class="flexColumn userBox">
-			<view class="userPhoto"><image src="../../static/images/about-img1.png" mode=""></image></view>
-			<view class="userName fs13 mgt5">哆啦A梦</view>
+			<view class="userPhoto" style="border-radius: 50%;overflow: hidden;">
+				
+				<open-data type="userAvatarUrl"></open-data>
+			
+			</view>
+			<view class="userName fs13 mgt5"><open-data type="userNickName"></open-data></view>
 		</view>
 		
 		<view class="flexRowBetween myInfor pdlr4">

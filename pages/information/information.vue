@@ -1,9 +1,12 @@
 <template>
 	<view>
 		<view class="mglr4 flexRowBetween newsList pdtb15">
-			<view class="item" v-for="(item,index) in newsData" :key="index" @click="Router.navigateTo({route:{path:'/pages/informationDetail/informationDetail'}})">
-				<view class="pic"><image src="../../static/images/information-img.png" mode=""></image></view>
-				<view class="tit avoidOverflow pdtb5">闪贷贷款借贷网资讯为您提供最新的贷款新闻</view>
+			<view class="item" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
+			@click="Router.navigateTo({route:{path:'/pages/informationDetail/informationDetail?id='+$event.currentTarget.dataset.id}})">
+				<view class="pic">
+					<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" mode=""></image>
+				</view>
+				<view class="tit avoidOverflow pdtb5">{{item.title}}</view>
 			</view>
 		</view>
 	</view>
@@ -14,25 +17,55 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				wx_info:{},
-				is_show:false,
-				newsData:[{},{},{},{},{},{},{},{}]
+				mainData:[]
 			}
 		},
 		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			self.$Utils.loadAll(['getMainData'], self);
 		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
+			
 			getMainData() {
 				const self = this;
-				console.log('852369')
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.searchItem = {
+					thirdapp_id:2
+				};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.getBefore = {
+					article:{
+						tableName:'Label',
+						middleKey:'menu_id',
+						key:'id',
+						searchItem:{
+							title: ['in', ['贷款资讯']],
+						},
+						condition:'in'
+					}
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData,res.info.data)
+					}
+					console.log(self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
+				self.$apis.articleGet(postData, callback);
+			},
+			
 		}
 	};
 </script>
