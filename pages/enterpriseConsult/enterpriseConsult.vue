@@ -4,7 +4,7 @@
 			<view class="item flexRowBetween">
 				<view class="ll">公司名称</view>
 				<view class="rr">
-					<input type="number"  v-model="submitData.passage1" placeholder="请输入" placeholder-class="placeholder" />
+					<input type="text"  v-model="submitData.passage1" placeholder="请输入" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<view class="item flexRowBetween">
