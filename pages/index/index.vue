@@ -91,8 +91,8 @@
 		
 		<view class="pdlr4 pdt15">
 			<view class="zixunNav flex fs13 color6">
-				<view class="tt mgr20" :class="curr==1?'on':''" @click="changeCurr('1')">行业资讯</view>
-				<view class="tt" :class="curr==2?'on':''" @click="changeCurr('2')">贷款资讯</view>
+				<view class="tt mgr20" :class="curr==1?'on':''" @click="changeCurr('1')">企业资讯</view>
+				<view class="tt" :class="curr==2?'on':''" @click="changeCurr('2')">健康资讯</view>
 			</view>
 			<view class="zixunList">
 				<view class="item flexRowBetween" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
@@ -240,7 +240,8 @@
 			    var callback = function(res){
 			        if(res.info.data.length>0&&res.info.data[0]){
 						self.serviceData.push.apply(self.serviceData,res.info.data)
-			        };    
+			        };   
+					 console.log(res)
 					self.$Utils.finishFunc('getServiceData');
 			    };
 				self.$apis.labelGet(postData, callback);

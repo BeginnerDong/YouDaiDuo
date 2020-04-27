@@ -66,7 +66,7 @@
         "permission" : {}
     },
     "h5" : {
-        "title" : "发电小程序",
+        "title" : "优贷多",
         "devServer" : {
             "https" : false
         },
