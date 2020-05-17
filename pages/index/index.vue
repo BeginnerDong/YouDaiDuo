@@ -30,7 +30,7 @@
 		</view>
 		<view class="f5H10"></view>
 		
-		<view class="indHome pdlr4 flex fs14 pdt15">
+		<view class="indHome pdlr4 flex fs14 pdt15" v-show="sliderData.url&&sliderData.url!='1'">
 			<view class="item"  @click="Router.navigateTo({route:{path:'/pages/personalLoan/personalLoan'}})">
 				<image src="../../static/images/home-icon1.png"></image>
 				<view class="tit">个人贷款</view>
@@ -56,13 +56,13 @@
 				<view class="tit">投诉建议</view>
 			</view>
 		</view>
-		<view class="f5H10"></view>
+		<view class="f5H10" v-show="sliderData.url&&sliderData.url!='1'"></view>
 		
 		<view class="R-Fixbtn" @click="tel">
 			<image class="icon" src="../../static/images/home-icon7.png" mode=""></image>
 		</view>
 		
-		<view class="mglr4 pdtb15">
+		<view class="mglr4 pdtb15" v-show="sliderData.url&&sliderData.url!='1'">
 			<view class="fs15 ftw pdb10">特色服务</view>
 			<view class="flexRowBetween ind-service">
 				<view class="Lpic item" v-if="serviceData[0]"
@@ -87,7 +87,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="f5H10"></view>
+		<view class="f5H10" v-show="sliderData.url&&sliderData.url!='1'"></view>
 		
 		<view class="pdlr4 pdt15">
 			<view class="zixunNav flex fs13 color6">
@@ -109,7 +109,7 @@
 		</view>
 		
 		<!--底部tab键-->
-		<view class="navbar">
+		<view class="navbar"  v-show="sliderData.url&&sliderData.url!='1'" >
 			<view class="navbar_item" @click="Router.redirectTo({route:{path:'/pages/index/index'}})">
 				<view class="nav_img">
 					<image src="../../static/images/nabar1-a.png" />
