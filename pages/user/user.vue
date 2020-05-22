@@ -14,7 +14,7 @@
 		<view class="flexRowBetween myInfor pdlr4">
 			<view class="item flex boxShaow" @click="Router.navigateTo({route:{path:'/pages/myLoan/myLoan'}})">
 				<image class="icon" src="../../static/images/about-icon.png"></image>
-				<view>我的贷款</view>
+				<view>我的{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</view>
 			</view>
 			<view class="item flex boxShaow" @click="Router.navigateTo({route:{path:'/pages/myConsult/myConsult'}})">
 				<image class="icon" src="../../static/images/about-icon1.png"></image>
@@ -34,7 +34,7 @@
 				<view class="nav_img">
 					<image src="../../static/images/nabar2.png" />
 				</view>
-				<view class="text">贷款咨询</view>
+				<view class="text">{{sliderData.url&&sliderData.url!='1'?'贷款':''}}咨询</view>
 			</view>
 			<view class="navbar_item" @click="Router.redirectTo({route:{path:'/pages/user/user'}})" >
 				<view class="nav_img">
@@ -55,21 +55,31 @@
 				Router:this.$Router,
 				showView: false,
 				wx_info:{},
-				is_show:false
+				is_show:false,
+				sliderData:{}
 			}
 		},
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getSliderData'], self);
 		},
+		
 		methods: {
-			getMainData() {
+			
+			getSliderData() {
 				const self = this;
-				console.log('852369')
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
 		}
 	};
 </script>

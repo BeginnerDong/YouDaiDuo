@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="orderNav flexRowBetween whiteBj">
-			<view class="tt" :class="num==1?'on':''" @click="changeNum('1')">个人贷款</view>
-			<view class="tt" :class="num==2?'on':''" @click="changeNum('2')">企业贷款</view>
+			<view class="tt" :class="num==1?'on':''" @click="changeNum('1')">个人{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</view>
+			<view class="tt" :class="num==2?'on':''" @click="changeNum('2')">企业{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</view>
 		</view>
 		<view class="pdtb20"></view>
 		
@@ -45,14 +45,15 @@
 					type:1,
 					thirdapp_id:2,
 					behavior:1
-				}
+				},
+				sliderData:{}
 			}
 		},
 		
 		onLoad() {
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
-			self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData','getSliderData'], self);
 		},
 		
 		onReachBottom() {
@@ -65,6 +66,23 @@
 		},
 		
 		methods: {
+			
+			getSliderData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+						console.log('423423',self.sliderData)
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
+			
 			changeNum(num){
 				const self=this;
 				if(num!=self.num){

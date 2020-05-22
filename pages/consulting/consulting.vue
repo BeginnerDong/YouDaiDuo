@@ -2,7 +2,7 @@
 	<view>
 		<view class="mglr4 myRowBetween">
 			<view class="item flexRowBetween">
-				<view class="ll">请选择贷款类型</view>
+				<view class="ll">请选择{{sliderData.url&&sliderData.url!='1'?'贷款':''}}类型</view>
 				<view class="rr" @click="seltTypeShow">
 					<text class="fs13" :style="submitData.relation_id!=''?'color:black':'color:#999'">
 					{{submitData.relation_id!=''?item:'请选择'}}</text>
@@ -51,7 +51,7 @@
 				<view class="nav_img">
 					<image src="../../static/images/nabar2-a.png" />
 				</view>
-				<view class="text this-text">贷款咨询</view>
+				<view class="text this-text">{{sliderData.url&&sliderData.url!='1'?'贷款':''}}咨询</view>
 			</view>
 			<view class="navbar_item" @click="Router.redirectTo({route:{path:'/pages/user/user'}})" >
 				<view class="nav_img">
@@ -67,28 +67,28 @@
 		<view class="seltTypeShow" v-show="is_seltTypeShow">
 			<view class="closebtn" @click="seltTypeShow">×</view>
 			<view class="item borderB1">
-				<view class="pdb10">个人贷款</view>
+				<view class="pdb10">个人{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</view>
 				<view class="flex fs12 color6">
 					<view class="flex mgr20" @click="personCurr('1','个人消费贷款')">
 						<image class="seltIcon" :src="curr==1?'../../static/images/icon1.png':'../../static/images/icon2.png'" mode=""></image>
-						<span>个人消费贷款</span>
+						<span>个人消费{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</span>
 					</view>
 					<view class="flex" @click="personCurr('2','个人经营贷款')">
 						<image class="seltIcon" :src="curr==2?'../../static/images/icon1.png':'../../static/images/icon2.png'" mode=""></image>
-						<span>个人经营贷款</span>
+						<span>个人经营{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</span>
 					</view>
 				</view>
 			</view>
 			<view class="item borderB1">
-				<view class="pdb10">企业贷款</view>
+				<view class="pdb10">企业{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</view>
 				<view class="flex fs12 color6">
 					<view class="flex mgr20" @click="personCurr('3','商业贷款')">
 						<image class="seltIcon" :src="curr==3?'../../static/images/icon1.png':'../../static/images/icon2.png'" mode=""></image>
-						<span>商业贷款</span>
+						<span>商业{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</span>
 					</view>
 					<view class="flex" @click="personCurr('4','政策性贷款')">
 						<image class="seltIcon" :src="curr==4?'../../static/images/icon1.png':'../../static/images/icon2.png'" mode=""></image>
-						<span>政策性贷款</span>
+						<span>政策性{{sliderData.url&&sliderData.url!='1'?'贷款':''}}</span>
 					</view>
 				</view>
 			</view>
@@ -124,17 +124,33 @@
 					behavior:'',
 					passage1:''
 				},
-				item:''
+				item:'',
+				sliderData:{}
 			}
 		},
 		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getSliderData'], self);
 		},
 		
 		methods: {
 			
+			getSliderData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+						console.log('423423',self.sliderData)
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
 			
 			submit() {
 				const self = this;

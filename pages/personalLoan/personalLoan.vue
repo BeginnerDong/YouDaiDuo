@@ -20,7 +20,7 @@
 			return {
 				Router:this.$Router,
 				mainData:[],
-				loadData:[{title:'个人消费贷款'},{title:'个人经营贷款'}]
+				
 			}
 		},
 		
