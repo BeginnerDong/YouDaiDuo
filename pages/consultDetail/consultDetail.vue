@@ -35,6 +35,9 @@
 		onLoad(options) {
 			const self = this;
 			self.id = options.id;
+			uni.setNavigationBarTitle({
+			    title: options.title
+			});
 			self.$Utils.loadAll(['getMainData'], self);
 		},
 		

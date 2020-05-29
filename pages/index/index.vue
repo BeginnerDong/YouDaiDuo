@@ -66,20 +66,20 @@
 			<view class="fs15 ftw pdb10">特色服务</view>
 			<view class="flexRowBetween ind-service">
 				<view class="Lpic item" v-if="serviceData[0]"
-				@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[0].id}})">
+				@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[0].id+'&title='+serviceData[0].title}})">
 					<image :src="serviceData&&serviceData[0]&&serviceData[0].mainImg&&
 					serviceData[0].mainImg[0]?serviceData[0].mainImg[0].url:''" mode=""></image>
 					<view class="text flexCenter">{{serviceData&&serviceData[0]?serviceData[0].title:''}}</view>
 				</view>
 				<view class="R-TwoPic">
 					<view class="item mgb10" v-if="serviceData[1]"
-					@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[1].id}})">
+					@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[1].id+'&title='+serviceData[1].title}})">
 						<image :src="serviceData&&serviceData[1]&&serviceData[1].mainImg&&
 					serviceData[1].mainImg[0]?serviceData[1].mainImg[0].url:''" mode=""></image>
 						<view class="text flexCenter">{{serviceData&&serviceData[1]?serviceData[1].title:''}}</view>
 					</view>
 					<view class="item" v-if="serviceData[2]"
-					@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[2].id}})">
+					@click="Router.navigateTo({route:{path:'/pages/consultDetail/consultDetail?id='+serviceData[2].id+'&title='+serviceData[2].title}})">
 						<image :src="serviceData&&serviceData[2]&&serviceData[2].mainImg&&
 					serviceData[2].mainImg[0]?serviceData[2].mainImg[0].url:''" mode=""></image>
 						<view class="text flexCenter">{{serviceData&&serviceData[2]?serviceData[2].title:''}}</view>
@@ -91,7 +91,7 @@
 		
 		<view class="pdlr4 pdt15">
 			<view class="zixunNav flex fs13 color6">
-				<view class="tt mgr20" :class="curr==1?'on':''" @click="changeCurr('1')">企业资讯</view>
+				<view class="tt mgr20" :class="curr==1?'on':''" @click="changeCurr('1')">企业福利</view>
 				<view class="tt" :class="curr==2?'on':''" @click="changeCurr('2')">健康资讯</view>
 			</view>
 			<view class="zixunList">

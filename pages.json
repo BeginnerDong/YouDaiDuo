@@ -87,7 +87,7 @@
 		{
 			"path": "pages/consultDetail/consultDetail",
 			"style": {
-				"navigationBarTitleText": "财务咨询",
+				"navigationBarTitleText": "",
 				"onReachBottomDistance":100
 			}
 		},
