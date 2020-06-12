@@ -46,6 +46,10 @@
 			self.submitData.relation_id = options.id;
 			//self.submitData.behavior = options.behavior;
 			// self.$Utils.loadAll(['getMainData'], self);
+			self.title = options.title;
+			uni.setNavigationBarTitle({
+			    title: self.title
+			});
 		},
 		
 		methods: {

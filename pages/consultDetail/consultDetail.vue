@@ -18,7 +18,7 @@
 			
 		</view>
 		<view class="submitbtn pdt30 pdb20">
-			<button class="btn" type="button" @click="Router.navigateTo({route:{path:'/pages/consult/consult?id='+mainData.id}})">立即咨询</button>
+			<button class="btn" type="button" @click="Router.navigateTo({route:{path:'/pages/consult/consult?id='+mainData.id+'&title='+title}})">立即咨询</button>
 		</view>
 	</view>
 </template>
@@ -28,15 +28,17 @@
 		data() {
 			return {
 				Router:this.$Router,
-				mainData:{}
+				mainData:{},
+				title:''
 			}
 		},
 		
 		onLoad(options) {
 			const self = this;
 			self.id = options.id;
+			self.title = options.title;
 			uni.setNavigationBarTitle({
-			    title: options.title
+			    title: self.title
 			});
 			self.$Utils.loadAll(['getMainData'], self);
 		},
