@@ -24,7 +24,7 @@
 		onLoad() {
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
-			self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData','getSliderData'], self);
 		},
 		
 		onReachBottom() {
@@ -37,6 +37,26 @@
 		},
 		
 		methods: {
+			
+			getSliderData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+						console.log('423423',self.sliderData)
+					
+						uni.setNavigationBarTitle({
+						    title: self.sliderData.url==1?'资讯':'贷款资讯'
+						});
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
 			
 			getMainData() {
 				const self = this;

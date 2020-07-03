@@ -10,14 +10,14 @@
 		{
 			"path": "pages/personalLoan/personalLoan",
 			"style": {
-				"navigationBarTitleText": "个人贷款",
+				"navigationBarTitleText": "",
 				"onReachBottomDistance":100
 			}
 		},
 		{
 			"path": "pages/personalLoanDetail/personalLoanDetail",
 			"style": {
-				"navigationBarTitleText": "贷款详情",
+				"navigationBarTitleText": "详情",
 				"onReachBottomDistance":100
 			}
 		},
@@ -31,14 +31,14 @@
 		{
 			"path": "pages/enterpriseLoan/enterpriseLoan",
 			"style": {
-				"navigationBarTitleText": "企业贷款",
+				"navigationBarTitleText": "",
 				"onReachBottomDistance":100
 			}
 		},
 		{
 			"path": "pages/enterpriseDetail/enterpriseDetail",
 			"style": {
-				"navigationBarTitleText": "贷款详情",
+				"navigationBarTitleText": "详情",
 				"onReachBottomDistance":100
 			}
 		},
@@ -52,7 +52,7 @@
 		{
 			"path": "pages/information/information",
 			"style": {
-				"navigationBarTitleText": "贷款资讯",
+				"navigationBarTitleText": "",
 				"onReachBottomDistance":100
 			}
 		},
@@ -101,7 +101,7 @@
 		{
 			"path": "pages/consulting/consulting",
 			"style": {
-				"navigationBarTitleText": "贷款咨询",
+				"navigationBarTitleText": "",
 				"onReachBottomDistance":100
 			}
 		},
@@ -115,7 +115,7 @@
 		{
 			"path": "pages/myLoan/myLoan",
 			"style": {
-				"navigationBarTitleText": "我的贷款",
+				"navigationBarTitleText": "",
 				"onReachBottomDistance":100
 			}
 		},

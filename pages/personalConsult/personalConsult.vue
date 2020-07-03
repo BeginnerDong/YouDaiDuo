@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="mglr4 myRowBetween">
-			<view class="item flexRowBetween">
+			<view class="item flexRowBetween" v-show="sliderData.url&&sliderData.url!='1'" >
 				<view class="ll">资金需求(万元)</view>
 				<view class="rr">
 					<input type="number" v-model="submitData.keywords" placeholder="请输入" placeholder-class="placeholder" />
@@ -40,7 +40,8 @@
 					keywords:'',
 					relation_id:'',
 					behavior:''
-				}
+				},
+				sliderData:{}
 			}
 		},
 		
@@ -49,9 +50,26 @@
 			self.submitData.relation_id = options.id;
 			self.submitData.behavior = options.behavior;
 			// self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getSliderData'], self);
 		},
 		
 		methods: {
+			
+			getSliderData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+						console.log('423423',self.sliderData)
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
 			
 			submit() {
 				const self = this;

@@ -76,7 +76,9 @@
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.sliderData = res.info.data[0]
-						console.log('423423',self.sliderData)
+						uni.setNavigationBarTitle({
+						    title: self.sliderData.url==1?'我的':'我的贷款'
+						});
 					}
 					self.$Utils.finishFunc('getSliderData');
 				};

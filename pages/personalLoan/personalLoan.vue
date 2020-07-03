@@ -26,10 +26,32 @@
 		
 		onLoad() {
 			const self = this;
-			self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData','getSliderData'], self);
 		},
 		
 		methods: {
+			
+			
+			
+			getSliderData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					title:'首页轮播图',
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+						console.log('423423',self.sliderData)
+					
+						uni.setNavigationBarTitle({
+						    title: self.sliderData.url==1?'个人':'个人贷款'
+						});
+					}
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
 			
 			
 			getMainData(){

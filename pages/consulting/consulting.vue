@@ -15,7 +15,7 @@
 					<input type="text" v-model="submitData.passage1" placeholder="请输入" placeholder-class="placeholder" />
 				</view>
 			</view>
-			<view class="item flexRowBetween">
+			<view class="item flexRowBetween" v-show="sliderData.url&&sliderData.url!='1'" >
 				<view class="ll">资金需求(万元)</view>
 				<view class="rr">
 					<input type="number" v-model="submitData.keywords" placeholder="请输入" placeholder-class="placeholder" />
@@ -145,7 +145,9 @@
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.sliderData = res.info.data[0]
-						console.log('423423',self.sliderData)
+						uni.setNavigationBarTitle({
+						    title: self.sliderData.url==1?'咨询':'贷款咨询'
+						});
 					}
 					self.$Utils.finishFunc('getSliderData');
 				};
